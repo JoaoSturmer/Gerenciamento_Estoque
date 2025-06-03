@@ -15,8 +15,6 @@ O sistema permite o controle de produtos em estoque, movimentações (entrada e 
 
 - **Java**
 - **MySQL**
-- **JDBC**
-- **Swing**
 - **Git/GitHub**
 
 ## Estrutura do Banco de Dados
