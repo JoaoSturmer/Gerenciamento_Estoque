@@ -16,7 +16,7 @@ public class Conexao {
     /**
      * URL de conexão com o banco de dados, incluindo o nome da base.
      */
-    private static final String URL = "jdbc:mysql://localhost:3306/db_produto";
+    private static final String URL = "jdbc:mysql://localhost:3306/gestao_estoque";
     
     /**
      * Nome do usuário do banco de dados.
