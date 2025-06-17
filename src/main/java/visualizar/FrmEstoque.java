@@ -1,34 +1,68 @@
-package view;
+package visualizar;
 
+import dao.MovimentacaoDAO;
+import dao.ProdutoDAO;
+import java.time.LocalDateTime;
 import javax.swing.table.DefaultTableModel;
-import model.Produto;
-import java.util.*;
+import modelo.Produto;
+import modelo.Movimentacao;
 import javax.swing.JOptionPane;
 
+/**
+ * Classe que representa a interface gráfica para o gerenciamento do estoque.
+ * Permite exibir os produtos e suas quantidades, bem como realizar
+ * movimentações.
+ *
+ * @author Ricardo Zimmer Junior
+ */
 public class FrmEstoque extends javax.swing.JFrame {
 
-    private Produto objetoproduto;
-    private int id;
+    /**
+     * Objeto DAO responsável pelas operações de produto no banco de dados.
+     */
+    private ProdutoDAO produtoDAO = new ProdutoDAO();
 
+    /**
+     * Objeto DAO responsável pelas operações de movimentacao no banco de dados.
+     */
+    private MovimentacaoDAO movimentacaoDAO = new MovimentacaoDAO();
+
+    /**
+     * Identificador do produto selecionado ou em edição.
+     */
+    private int id_produto;
+
+    /**
+     * Identificador da movimentaçao selecionado ou em edição.
+     */
+    private int id_movimentacao;
+
+    /**
+     * Carrega os dados dos produtos na tabela de estoque. Limpa as linhas
+     * existentes e adiciona uma linha para cada produto presente no banco de
+     * dados.
+     */
     public void carregaTabela() {
         DefaultTableModel modelo = (DefaultTableModel) this.jTableEstoque.getModel();
-        modelo.setNumRows(0); //Posiciona na primeira linha da tabela
-//Carrega a lista de objetos aluno
-        ArrayList<Produto> minhaLista = objetoproduto.getMinhaLista();
-        for (Produto a : minhaLista) {
+        modelo.setNumRows(0);
+
+        for (Produto a : produtoDAO.getListaProdutos()) {
             modelo.addRow(new Object[]{
                 a.getId(),
-                a.getCategoria(),
                 a.getNome(),
                 a.getQuantidade(),
-                a.getPreco()
+                a.getQuantidadeMaxima(),
+                a.getQuantidadeMinima()
             });
         }
     }
 
+    /**
+     * Construtor da classe FrmEstoque. Inicializa os componentes da interface
+     * gráfica e carrega os dados na tabela.
+     */
     public FrmEstoque() {
         initComponents();
-        this.objetoproduto = new Produto();
         carregaTabela();
     }
 
@@ -57,7 +91,7 @@ public class FrmEstoque extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Categoria", "Nome", "Quantidade", "Preço"
+                "ID", "Nome", "Quantidade", "Quantidade Min", "Quantidade Max"
             }
         ));
         jTableEstoque.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -110,7 +144,7 @@ public class FrmEstoque extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)
                         .addComponent(JBAdicionar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,65 +186,111 @@ public class FrmEstoque extends javax.swing.JFrame {
     private void JTFQuantidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JTFQuantidadeActionPerformed
 
     }//GEN-LAST:event_JTFQuantidadeActionPerformed
-
+    /**
+     * Evento acionado ao clicar no botão "Cancelar". Fecha (ou "descarta") a
+     * janela atual, liberando seus recursos.
+     *
+     * @param evt O evento de ação disparado pelo clique no botão.
+     */
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
         this.dispose();
     }//GEN-LAST:event_JBCancelarActionPerformed
-
+    /**
+     * Método acionado ao clicar no botão "Adicionar". Realiza a adição de
+     * quantidade ao estoque do produto selecionado na tabela, registrando uma
+     * movimentação do tipo "ENTRADA" com a quantidade informada.
+     *
+     * @param evt O evento de ação disparado pelo clique no botão.
+     */
     private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
-        int linha = this.jTableEstoque.getSelectedRow();
-        double preco = Double.parseDouble(this.jTableEstoque.getValueAt(linha, 4).toString());
-        String nome = this.jTableEstoque.getValueAt(linha, 2).toString();
-        String categoria = this.jTableEstoque.getValueAt(linha, 1).toString();
-        int quantidade1 = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 3).toString());
+        try {
+            int linha = this.jTableEstoque.getSelectedRow();
+            int quantidade1 = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 2).toString());
+            int quantidadeMax = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 4).toString());
+            String tipo = "ENTRADA";
+            LocalDateTime data = LocalDateTime.now();
+            int quantidade_movimentacao = Integer.parseInt(JTFQuantidade.getText());
+            int quantidade = quantidade_movimentacao + quantidade1;
 
-        int soma = Integer.parseInt(JTFQuantidade.getText());
-        int quantidade = soma + quantidade1;
+            Produto produto = new Produto(id_produto, quantidade);
 
-        if (this.objetoproduto.updateProdutoBD(quantidade, nome, preco, categoria, id)) {
-            this.JTFNome.setText("");
-            this.JTFQuantidade.setText("");
-            JOptionPane.showMessageDialog(rootPane, "Item adicionado com Sucesso!");
+            Movimentacao movimentacao = new Movimentacao(id_movimentacao, quantidade_movimentacao, data, tipo, produto);
+
+            if (quantidade <= quantidadeMax) {
+                if (movimentacaoDAO.movimentarEstoque(movimentacao)) {
+                    this.JTFNome.setText("");
+                    this.JTFQuantidade.setText("");
+                    JOptionPane.showMessageDialog(rootPane, "Item adicionado com Sucesso!");
+                }
+            } else {
+                throw new Mensagem("Quantidade não pode ser maior que a quantidade maxima permitida.");
+            }
+        } catch (NumberFormatException erro2) {
+            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        } catch (Mensagem erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } finally {
             carregaTabela();
         }
     }//GEN-LAST:event_JBAdicionarActionPerformed
-
+    /**
+     * Método acionado quando o usuário clica em uma linha da tabela de estoque.
+     * Seleciona o produto clicado e preenche o campo de texto com o nome do
+     * produto.
+     *
+     * @param evt O evento de clique do mouse na tabela.
+     */
     private void jTableEstoqueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEstoqueMouseClicked
         if (this.jTableEstoque.getSelectedRow() != -1) {
             int linha = this.jTableEstoque.getSelectedRow();
 
-            // CAPTURE O ID!
             int idSelecionado = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 0).toString());
-            this.id = idSelecionado; // Armazena em atributo da classe
 
-            // Popula os campos
-            String nome = this.jTableEstoque.getValueAt(linha, 2).toString();
+            this.id_produto = idSelecionado;
+
+            String nome = this.jTableEstoque.getValueAt(linha, 1).toString();
 
             this.JTFNome.setText(nome);
         }
     }//GEN-LAST:event_jTableEstoqueMouseClicked
-
+    /**
+     * Ação para retirar uma quantidade de produto do estoque. Atualiza a
+     * quantidade do produto removendo a quantidade especificada, garantindo que
+     * a quantidade resultante não seja menor que a quantidade mínima permitida.
+     * Registra a movimentação como uma saída no estoque.
+     *
+     * @param evt O evento de ação disparado pelo botão "Retirar".
+     */
     private void JBRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBRetirarActionPerformed
         try {
             int linha = this.jTableEstoque.getSelectedRow();
-            double preco = Double.parseDouble(this.jTableEstoque.getValueAt(linha, 4).toString());
-            String nome = this.jTableEstoque.getValueAt(linha, 2).toString();
-            String categoria = this.jTableEstoque.getValueAt(linha, 1).toString();
-            int quantidade1 = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 3).toString());
+            int quantidade1 = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 2).toString());
+            int quantidadeMin = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 3).toString());
+            String tipo = "SAIDA";
+            LocalDateTime data = LocalDateTime.now();
+            int quantidade_movimentacao = Integer.parseInt(JTFQuantidade.getText());
+            int quantidade = quantidade1 - quantidade_movimentacao;
 
-            int soma = Integer.parseInt(JTFQuantidade.getText());
-            int quantidade = quantidade1 - soma;
+            Produto produtoAtualizado = new Produto(id_produto, quantidade);
 
-            if (this.objetoproduto.updateProdutoBD(quantidade, nome, preco, categoria, id)) {
-                this.JTFNome.setText("");
-                this.JTFQuantidade.setText("");
-                JOptionPane.showMessageDialog(rootPane, "Item retirado com Sucesso!");
+            Movimentacao movimentacao = new Movimentacao(id_movimentacao, quantidade_movimentacao, data, tipo, produtoAtualizado);
+
+            if (quantidade >= quantidadeMin) {
+                if (movimentacaoDAO.movimentarEstoque(movimentacao)) {
+                    this.JTFNome.setText("");
+                    this.JTFQuantidade.setText("");
+                    JOptionPane.showMessageDialog(rootPane, "Item retirado com Sucesso!");
+                }
+            } else {
+                throw new Mensagem("Quantidade não pode ser menor que a quantidade minima permitida.");
             }
-
+        } catch (NumberFormatException erro2) {
+            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        } catch (Mensagem erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
         } finally {
             carregaTabela();
         }
-
     }//GEN-LAST:event_JBRetirarActionPerformed
 
     public static void main(String args[]) {
