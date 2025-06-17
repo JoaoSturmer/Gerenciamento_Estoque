@@ -26,7 +26,7 @@ public class Conexao {
     /**
      * Senha do usuário do banco de dados.
      */
-    private static final String PASS = "Zimmer1234@";
+    private static final String PASS = "sua_senha";
 
     /**
      * Método responsável por retornar uma conexão ativa com o banco de dados.
