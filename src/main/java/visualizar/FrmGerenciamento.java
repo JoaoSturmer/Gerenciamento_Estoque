@@ -39,6 +39,11 @@ public class FrmGerenciamento extends javax.swing.JFrame {
      * Identificador do produto selecionado ou em edição.
      */
     private int id_produto;
+    
+    /**
+     * Identificador da categoria selecionado ou em edição.
+     */
+    private int id_categoria;
 
     /**
      * Nome da categoria associada ao produto.
@@ -79,7 +84,7 @@ public class FrmGerenciamento extends javax.swing.JFrame {
 
         for (Categoria a : categoriaDAO.getListarCategoria()) {
             modelo.addElement(
-                    a.getNome_categoria()
+                    a.toString()
             );
         }
     }
@@ -312,8 +317,13 @@ public class FrmGerenciamento extends javax.swing.JFrame {
             int quantidadeMaxima = 0;
             int quantidadeMinima = 0;
             String unidade = "";
+            String categoria = this.JCBCategoria.getSelectedItem().toString();
 
-            int id_categoria = this.JCBCategoria.getSelectedIndex() + 1;
+            if (categoria != null && categoria.contains(" - ")) {
+                String[] partes = categoria.split(" - ", 2); // limita a 2 partes
+                id_categoria = Integer.parseInt(partes[0].trim());
+                nome_categoria = partes[1].trim();
+            }
 
             if (this.JTFNome.getText().length() < 2) {
                 throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
@@ -348,9 +358,9 @@ public class FrmGerenciamento extends javax.swing.JFrame {
                 preco = Double.parseDouble(this.JTFPreco.getText());
             }
 
-            Categoria categoria = new Categoria(id_categoria, nome_categoria);
+            Categoria cat = new Categoria(id_categoria, nome_categoria);
 
-            Produto produtoAtualizado = new Produto(id_produto, nome, preco, unidade, quantidade, quantidadeMinima, quantidadeMaxima, categoria);
+            Produto produtoAtualizado = new Produto(id_produto, nome, preco, unidade, quantidade, quantidadeMinima, quantidadeMaxima, cat);
 
             if (produtoDAO.atualizarProduto(produtoAtualizado)) {
                 this.JTFNome.setText("");

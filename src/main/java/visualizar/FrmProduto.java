@@ -36,7 +36,12 @@ public class FrmProduto extends javax.swing.JFrame {
     /**
      * Identificador do produto selecionado ou em edição.
      */
-    private int id;
+    private int id_produto;
+    
+    /**
+     * Identificador ds categoria selecionado ou em edição.
+     */
+    private int id_categoria;
 
     /**
      * Nome da categoria associada ao produto.
@@ -52,7 +57,7 @@ public class FrmProduto extends javax.swing.JFrame {
 
         for (Categoria a : categoriaDAO.getListarCategoria()) {
             modelo.addElement(
-                    a.getNome_categoria()
+                    a.toString()
             );
         }
     }
@@ -232,8 +237,13 @@ public class FrmProduto extends javax.swing.JFrame {
             String unidade = "";
             double preco = 0;
             String nome = "";
-
-            int id_categoria = (int) JCBCategoria.getSelectedIndex() + 1;
+            String itemSelecionado = (String) JCBCategoria.getSelectedItem();
+            
+            if (itemSelecionado != null && itemSelecionado.contains(" - ")) {
+                String[] partes = itemSelecionado.split(" - ", 2); // limita a 2 partes
+                id_categoria = Integer.parseInt(partes[0].trim());
+                nome_categoria = partes[1].trim();
+            }
 
             if (this.JTFNome.getText().length() < 2) {
                 throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
@@ -267,7 +277,7 @@ public class FrmProduto extends javax.swing.JFrame {
 
             Categoria categoria = new Categoria(id_categoria, nome_categoria);
 
-            Produto produto = new Produto(id, nome, preco, unidade, quantidade, quantidadeMinima, quantidadeMaxima, categoria);
+            Produto produto = new Produto(id_produto, nome, preco, unidade, quantidade, quantidadeMinima, quantidadeMaxima, categoria);
 
             if (produtoDAO.inserirProduto(produto)) {
 

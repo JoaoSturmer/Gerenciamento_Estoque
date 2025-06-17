@@ -131,4 +131,9 @@ public class Categoria {
     public void setEmbalagem(String embalagem) {
         this.embalagem = embalagem;
     }
+    
+     @Override
+    public String toString() {
+        return id_categoria + " - " + nome_categoria;
+    }
 }
