@@ -7,10 +7,10 @@ O sistema permite o controle de produtos em estoque, movimentações (entrada e 
 
 ## Alunos
 
-| **Nome**                         | **RA**                                         
-|-------------------------------------------|---------------------------------------------------
-| Ricardo Zimmer Junior / Ricar | 10724257987   
-| João Gabriel Missio Stürmer | 1072518425
+| **Nome**                         | **GitHub**                                         | **RA**|                                         
+|----------------------------------|---------|---------------------------------------------------
+| Ricardo Zimmer Junior / Ricar | [@Ricardo](https://github.com/Ricardozj1) | 10724257987 |
+| João Gabriel Missio Stürmer | [@João](https://github.com/JoaoSturmer) | 1072518425|
 
 ##  Objetivos
 
