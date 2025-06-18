@@ -5,6 +5,13 @@
 Projeto desenvolvido para a disciplina de Programação, baseado no modelo de cadastro de alunos utilizando Java, MySQL e DAO.  
 O sistema permite o controle de produtos em estoque, movimentações (entrada e saída), reajuste de preços, e geração de relatórios úteis para gestão de um pequeno comércio.
 
+## Alunos
+
+| **Nome**                         | **RA**                                         
+|-------------------------------------------|---------------------------------------------------
+| Ricardo Zimmer Junior / Ricar | 10724257987   
+| João Gabriel Missio Stürmer | 1072518425
+
 ##  Objetivos
 
 - Aplicar os conceitos de orientação a objetos, DAO e conexão com banco de dados.
@@ -13,9 +20,15 @@ O sistema permite o controle de produtos em estoque, movimentações (entrada e 
 
 ## Tecnologias Utilizadas
 
-- **Java**
-- **MySQL**
-- **Git/GitHub**
+| **Ferramenta / Tecnologia**                         | **Finalidade**                                         
+|-------------------------------------------|---------------------------------------------------
+| JDK 17 | Ambiente de desenvolvimento (Java 17)     
+| Swing (faz parte do JDK) | Criação da interface gráfica (GUI)
+| MySQL Server 8.0 | Banco de dados relacional      
+| JDBC - MySQL Connector 8.3.0 | Comunicação entre Java e MySQL       
+| Apache NetBeans 26 | Ambiente de desenvolvimento (IDE)      
+| Git 2.44.0 | Controle de versão local
+| GitHub (Interface web) | Repositório remoto e colaboração em equipe
 
 ## Estrutura do Banco de Dados
 
