@@ -66,8 +66,8 @@ public class FrmGerenciamento extends javax.swing.JFrame {
                 a.getCategoria().getNome_categoria(),
                 a.getNome(),
                 a.getQuantidade(),
-                a.getQuantidadeMaxima(),
                 a.getQuantidadeMinima(),
+                a.getQuantidadeMaxima(),
                 a.getUnidade(),
                 a.getPreco()
             });

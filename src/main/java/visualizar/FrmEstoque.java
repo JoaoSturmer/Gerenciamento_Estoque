@@ -51,8 +51,8 @@ public class FrmEstoque extends javax.swing.JFrame {
                 a.getId(),
                 a.getNome(),
                 a.getQuantidade(),
-                a.getQuantidadeMaxima(),
-                a.getQuantidadeMinima()
+                a.getQuantidadeMinima(),
+                a.getQuantidadeMaxima()
             });
         }
     }
@@ -265,7 +265,6 @@ public class FrmEstoque extends javax.swing.JFrame {
         try {
             int linha = this.jTableEstoque.getSelectedRow();
             int quantidade1 = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 2).toString());
-            int quantidadeMin = Integer.parseInt(this.jTableEstoque.getValueAt(linha, 3).toString());
             String tipo = "SAIDA";
             LocalDateTime data = LocalDateTime.now();
             int quantidade_movimentacao = Integer.parseInt(JTFQuantidade.getText());
@@ -275,14 +274,14 @@ public class FrmEstoque extends javax.swing.JFrame {
 
             Movimentacao movimentacao = new Movimentacao(id_movimentacao, quantidade_movimentacao, data, tipo, produtoAtualizado);
 
-            if (quantidade >= quantidadeMin) {
+            if (quantidade >= 0) {
                 if (movimentacaoDAO.movimentarEstoque(movimentacao)) {
                     this.JTFNome.setText("");
                     this.JTFQuantidade.setText("");
                     JOptionPane.showMessageDialog(rootPane, "Item retirado com Sucesso!");
                 }
             } else {
-                throw new Mensagem("Quantidade não pode ser menor que a quantidade minima permitida.");
+                throw new Mensagem("Quantidade não pode ser menor que 0.");
             }
         } catch (NumberFormatException erro2) {
             JOptionPane.showMessageDialog(null, "Informe um número válido.");

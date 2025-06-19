@@ -28,6 +28,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         jMenuGerenciamento = new javax.swing.JMenuItem();
         jMenuGerenciamentoC = new javax.swing.JMenuItem();
         jMenuEstoque = new javax.swing.JMenuItem();
+        jMenuRelatorio = new javax.swing.JMenuItem();
         jMenuSair = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
@@ -77,6 +78,14 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuArquivo.add(jMenuEstoque);
+
+        jMenuRelatorio.setText("Relatorios");
+        jMenuRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuRelatorioActionPerformed(evt);
+            }
+        });
+        jMenuArquivo.add(jMenuRelatorio);
 
         jMenuSair.setText("Sair");
         jMenuSair.addActionListener(new java.awt.event.ActionListener() {
@@ -167,6 +176,11 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuSairActionPerformed
 
+    private void jMenuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRelatorioActionPerformed
+        FrmRelatorio objeto = new FrmRelatorio();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_jMenuRelatorioActionPerformed
+
     public static void main(String args[]) {
 
         try {
@@ -203,6 +217,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuGerenciamentoC;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuProduto;
+    private javax.swing.JMenuItem jMenuRelatorio;
     private javax.swing.JMenuItem jMenuSair;
     // End of variables declaration//GEN-END:variables
 }

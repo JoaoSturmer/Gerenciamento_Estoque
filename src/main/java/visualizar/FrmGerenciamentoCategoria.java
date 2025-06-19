@@ -65,6 +65,7 @@ public class FrmGerenciamentoCategoria extends javax.swing.JFrame {
         jLabel1.setText("Nome");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gerenciamento de Categoria");
 
         jTableGerenciar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

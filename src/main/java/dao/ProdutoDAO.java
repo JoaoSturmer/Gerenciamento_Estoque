@@ -43,8 +43,8 @@ public class ProdutoDAO {
                         rs.getDouble("preco"),
                         rs.getString("unidade"),
                         rs.getInt("quantidade_produto"),
-                        rs.getInt("quantidadeMax"),
                         rs.getInt("quantidadeMin"),
+                        rs.getInt("quantidadeMax"),
                         cat
                 );
                 listaProdutos.add(p);
